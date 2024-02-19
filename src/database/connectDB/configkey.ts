@@ -1,0 +1,8 @@
+enum ConfigKey {
+    PORT = 'PORT',
+    CORS_WHITELIST = 'CORS_WHITELIST',
+
+    MONGO_DATABASE_CONNECTION_STRING = 'MONGO_DATABASE_CONNECTION_STRING',
+}
+
+export default ConfigKey;

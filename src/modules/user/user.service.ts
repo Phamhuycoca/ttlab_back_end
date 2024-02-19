@@ -1,0 +1,70 @@
+import { Injectable } from '@nestjs/common';
+import { User } from 'src/database/schemas/user.schema';
+import { BaseService } from 'src/common/base/base.service';
+import { GetUserListQuery, UpdateUserDto, createUserDto } from './dto/user.interface';
+import { Types } from 'mongoose';
+import { UserAttributesForList } from './dto/user.constant';
+import { UserRepository } from './repository/user.repository';
+
+@Injectable()
+export class UserService extends BaseService<User, UserRepository> {
+  constructor(private readonly userRepository: UserRepository) {
+    super(userRepository);
+  }
+
+  async _createUser(dto: createUserDto) {
+    try {
+      const product: SchemaCreateDocument<User> = {
+        ...(dto as any),
+      };
+      const res = await this.userRepository.createOne(product);
+      return res;
+    } catch (error) {
+      this.logger.error('Error in productService createproduct: ' + error);
+      throw error;
+    }
+  }
+  async _updateUser(id: Types.ObjectId, dto: UpdateUserDto) {
+    try {
+      await this.userRepository.updateOneById(id, dto);
+      return await this._findUserById(id);
+    } catch (error) {
+      this.logger.error('Error in ProductService updateProduct: ' + error);
+      throw error;
+    }
+  }
+  async _findUserById(
+    id: Types.ObjectId,
+    attributes: (keyof User)[] = UserAttributesForList,
+  ) {
+    try {
+      return await this.userRepository.getOneById(id, attributes);
+    } catch (error) {
+      this.logger.error('Error in UserService findUserById: ' + error);
+      throw error;
+    }
+  }
+
+  async _deleteUser(id: Types.ObjectId) {
+    try {
+        await this.userRepository.softDeleteOne({ _id: id });
+        return { id };
+    } catch (error) {
+        this.logger.error('Error in UserService deleteUser: ' + error);
+        throw error;
+    }
+}
+
+async _findAllAndCountUserByQuery(query: GetUserListQuery) {
+  try {
+      const result =
+          await this.userRepository.findAllAndCountUserByQuery(query);
+      return result;
+  } catch (error) {
+      this.logger.error(
+          'Error in UserService findAllAndCountUserByQuery: ' + error,
+      );
+      throw error;
+  }
+}
+}

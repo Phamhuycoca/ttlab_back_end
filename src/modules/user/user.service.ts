@@ -26,7 +26,7 @@ export class UserService extends BaseService<User, UserRepository> {
   }
   async deleteImageByUrl(imageUrl: string): Promise<void> {
     try{
-        await this.cloudinary.deleteImageByUrl(imageUrl);
+        const res=await this.cloudinary.deleteImageByUrl(imageUrl);
     }catch(error){
       this.logger.error('Error in delete ImageCloudinary: ' + error);
       throw error;

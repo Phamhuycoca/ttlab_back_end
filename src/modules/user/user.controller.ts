@@ -54,7 +54,6 @@ export class UserController extends BaseController{
                 );
             }
             if(file !=null){
-                console.log(user.avatar);
                 if(user.avatar!==''){
                     this.UserService.deleteImageByUrl(user.avatar);
                 }

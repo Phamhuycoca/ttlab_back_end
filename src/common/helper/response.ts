@@ -32,7 +32,6 @@ export class ErrorResponse {
             code,
             message,
             errors,
-            version,
         };
     }
 }

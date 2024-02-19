@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { BaseController } from "src/common/base/base.controller";
 import { UserService } from "./user.service";
 import { GetUserListQuery, UpdateUserDto, createUserDto } from "./dto/user.interface";
 import { TrimBodyPipe } from "src/common/helper/pipe/trim.body.pipe";
-import { SuccessResponse } from "src/common/helper/response";
+import { ErrorResponse, SuccessResponse } from "src/common/helper/response";
 import mongoose from "mongoose";
 import { toObjectId } from "src/common/helper/commonFunction";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiBody, ApiOperation } from "@nestjs/swagger";
+import { HttpStatus } from "src/common/constants";
 
 
 @Controller('user')
@@ -20,10 +23,15 @@ export class UserController extends BaseController{
     {
         return await this.UserService._findAllAndCountUserByQuery(query);
     }
+
+    @ApiOperation({ summary: 'Create User' })
+    @ApiBody({ type: createUserDto })
     @Post()
-    async createUser(@Body(new TrimBodyPipe()) dto: createUserDto)
+    @UseInterceptors(FileInterceptor('file'))
+    async createUser(@Body(new TrimBodyPipe()) dto: createUserDto,@UploadedFile() file: Express.Multer.File)
     {
         try{
+            file !=null ? dto.avatar=await this.UserService.uploadImageToCloudinary(file) : dto.avatar='';
             const result=await this.UserService._createUser(dto)
             return new SuccessResponse(result)
         }catch (error) {
@@ -31,12 +39,27 @@ export class UserController extends BaseController{
         }
     }
     @Put(':id')
+    @UseInterceptors(FileInterceptor('file'))
     async updateUser(@Param('id')id:string,
     @Body(new TrimBodyPipe())
-    dto:UpdateUserDto)
+    dto:UpdateUserDto, @UploadedFile() file: Express.Multer.File)
     {
         try
         {
+            const user = await this.UserService._findUserById(toObjectId(id));
+            if (!user) {
+                return new ErrorResponse(
+                    HttpStatus.ITEM_NOT_FOUND,
+                     "User not found"
+                );
+            }
+            if(file !=null){
+                console.log(user.avatar);
+                if(user.avatar!==''){
+                    this.UserService.deleteImageByUrl(user.avatar);
+                }
+            }
+            file !=null ? dto.avatar=await this.UserService.uploadImageToCloudinary(file) : dto.avatar=user.avatar;
             const result=await this.UserService._updateUser(toObjectId(id),dto);
             if(result)
                 return new SuccessResponse(result)

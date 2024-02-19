@@ -1,17 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from 'src/database/schemas/user.schema';
 import { BaseService } from 'src/common/base/base.service';
 import { GetUserListQuery, UpdateUserDto, createUserDto } from './dto/user.interface';
 import { Types } from 'mongoose';
 import { UserAttributesForList } from './dto/user.constant';
 import { UserRepository } from './repository/user.repository';
+import { CloudinaryService } from './../cloudinary/cloudinary.service';
 
 @Injectable()
 export class UserService extends BaseService<User, UserRepository> {
-  constructor(private readonly userRepository: UserRepository) {
+  constructor(private readonly userRepository: UserRepository,private readonly cloudinary:CloudinaryService) {
     super(userRepository);
   }
-
+  async uploadImageToCloudinary(file: Express.Multer.File): Promise<string> {
+    try {
+      if (!file || !file.mimetype.startsWith('image/')) {
+        throw new BadRequestException('Invalid file type. Only images are allowed.');
+      }
+      const result = await this.cloudinary.uploadImage(file);
+      return result.secure_url;
+    } catch (error) {
+      this.logger.error('Failed to upload image to Cloudinary: ' + error);
+      throw error;
+    }
+  }
+  async deleteImageByUrl(imageUrl: string): Promise<void> {
+    try{
+        await this.cloudinary.deleteImageByUrl(imageUrl);
+    }catch(error){
+      this.logger.error('Error in delete ImageCloudinary: ' + error);
+      throw error;
+    }
+  }
   async _createUser(dto: createUserDto) {
     try {
       const product: SchemaCreateDocument<User> = {

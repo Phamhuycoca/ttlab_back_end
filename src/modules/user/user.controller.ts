@@ -21,9 +21,13 @@ export class UserController extends BaseController{
     @Get()
     async getAllUser(@Query()query :GetUserListQuery)
     {
-        return await this.UserService._findAllAndCountUserByQuery(query);
+        try{
+            const result=await this.UserService._findAllAndCountUserByQuery(query);
+            return new SuccessResponse(result);
+        }catch(error){
+            this.handleError(error);
+        }
     }
-
     @ApiOperation({ summary: 'Create User' })
     @ApiBody({ type: createUserDto })
     @Post()

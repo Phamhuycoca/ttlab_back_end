@@ -77,8 +77,7 @@ export class UserService extends BaseService<User, UserRepository> {
 
 async _findAllAndCountUserByQuery(query: GetUserListQuery) {
   try {
-      const result =
-          await this.userRepository.findAllAndCountUserByQuery(query);
+      const result =await this.userRepository.findAllAndCountUserByQuery(query);
       return result;
   } catch (error) {
       this.logger.error(

@@ -18,7 +18,12 @@ export class ProductController extends BaseController{
   @Get()
     async getAllProduct(@Query()query :GetProductListQuery)
     {
-        return await this.productService._findAllAndCountProductByQuery(query);
+        try{
+            const result= await this.productService._findAllAndCountProductByQuery(query);
+            return new SuccessResponse(result);
+        }catch(error){
+            this.handleError(error);
+        }
     }
 
     @ApiOperation({ summary: 'Create Product' })
@@ -28,6 +33,8 @@ export class ProductController extends BaseController{
     async createProduct(@Body(new TrimBodyPipe()) dto: createProductDto,@UploadedFile() file: Express.Multer.File)
     {
         try{
+            console.log(dto);
+            console.log(file);
             file !=null ? dto.image=await this.productService.uploadImageToCloudinary(file) : dto.image='';
             const result=await this.productService._createProduct(dto)
             return new SuccessResponse(result)

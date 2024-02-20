@@ -18,7 +18,7 @@ export class User extends MongoBaseSchema {
     @Prop({ required: true, type: String })
     name?: string;
 
-    @Prop({ required: true, type: String })
+    @Prop({unique:true, required: true, type: String })
     email?: string;
 
     @Prop({ required: true, type: String })

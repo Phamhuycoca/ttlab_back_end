@@ -34,13 +34,13 @@ export class UserService extends BaseService<User, UserRepository> {
   }
   async _createUser(dto: createUserDto) {
     try {
-      const product: SchemaCreateDocument<User> = {
+      const user: SchemaCreateDocument<User> = {
         ...(dto as any),
       };
-      const res = await this.userRepository.createOne(product);
+      const res = await this.userRepository.createOne(user);
       return res;
     } catch (error) {
-      this.logger.error('Error in productService createproduct: ' + error);
+      this.logger.error('Error in userService create user: ' + error);
       throw error;
     }
   }
@@ -49,7 +49,7 @@ export class UserService extends BaseService<User, UserRepository> {
       await this.userRepository.updateOneById(id, dto);
       return await this._findUserById(id);
     } catch (error) {
-      this.logger.error('Error in ProductService updateProduct: ' + error);
+      this.logger.error('Error in userService update user: ' + error);
       throw error;
     }
   }

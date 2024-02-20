@@ -5,6 +5,6 @@ export class LoginDto{
     @IsNotEmpty({message:'Vui lòng nhập đầy đủ thông tin'})
     email: string;
     @IsString()
-    @IsNotEmpty({ message: 'Không được để trống' })
+    @IsNotEmpty({ message: 'Vui lòng nhập đầy đủ thông tin' })
     password: string;
 }

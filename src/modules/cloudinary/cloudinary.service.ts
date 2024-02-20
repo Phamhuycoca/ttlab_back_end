@@ -32,7 +32,6 @@ export class CloudinaryService {
   async deleteImageByUrl(imageUrl: string): Promise<boolean> {
     try {
       //console.log('Attempting to delete image from Cloudinary. URL:', imageUrl);
-  
       const publicIdMatch = imageUrl.split('/').pop();
       const publicId = publicIdMatch ? publicIdMatch.split('.')[0] : null;
   
@@ -46,7 +45,7 @@ export class CloudinaryService {
         throw new BadRequestException('Failed to delete image from Cloudinary.');
       }
   
-      //console.log('Image deleted successfully.');
+      console.log('Image deleted successfully.');
       return true;
     } catch (error) {
       console.error('Error deleting image from Cloudinary:', error);

@@ -73,15 +73,15 @@ export class UserController extends BaseController{
     async getUserById(@Param('id')id:string,)
     {
         try{
-            const isValid=mongoose.Types.ObjectId.isValid(id)
-            if(!isValid)
-            {
-                throw new HttpException("Id không giống định dạng",HttpStatus.BAD_REQUEST);
-            }
+            
             const result = await this.UserService._findUserById(toObjectId(id));
-            if(result)
-                return new SuccessResponse(result);
-            throw new HttpException("Not found",HttpStatus.NOT_FOUND);
+            if (!result) {
+                return new ErrorResponse(
+                    HttpStatus.ITEM_NOT_FOUND,
+                     "User not found"
+                );
+            }
+            return new SuccessResponse(result);
         }catch(error)
         {
             this.handleError(error);
@@ -90,9 +90,23 @@ export class UserController extends BaseController{
     @Delete(':id')
     async deleteUser(@Param('id')id:string,)
     {
+      try{
+        const user = await this.UserService._findUserById(toObjectId(id));
+        if (!user) {
+            return new ErrorResponse(
+                HttpStatus.NOT_FOUND,
+                 "User not found"
+            );
+        }
+        console.log(user.avatar);
+        if(user.avatar !==''){
+            this.UserService.deleteImageByUrl(user.avatar);
+        }
         const result=await this.UserService._deleteUser(toObjectId(id))
-        if(result)
-            return new SuccessResponse(result);
-        throw new HttpException("Không tìm thấy product",HttpStatus.NOT_FOUND);
+        return new SuccessResponse(result);
+      }catch(error){
+        this.handleError(error);
+
+      }
     }
   }

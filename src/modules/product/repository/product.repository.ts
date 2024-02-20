@@ -3,25 +3,26 @@ import { InjectModel } from "@nestjs/mongoose";
 import { FilterQuery, Model } from "mongoose";
 import { BaseRepository } from "src/common/base/base.repository";
 import { User, UserDocument } from "src/database/schemas/user.schema";
-import { GetUserListQuery } from "../dto/user.interface";
 import { DEFAULT_FIRST_PAGE, DEFAULT_LIMIT_FOR_PAGINATION, DEFAULT_ORDER_BY, DEFAULT_ORDER_DIRECTION,OrderDirection,softDeleteCondition } from "src/common/constants";
 import { parseMongoProjection } from "src/common/helper/commonFunction";
-import { UserAttributesForList } from "../dto/user.constant";
+import { Product, ProductDocument } from "src/database/schemas/product.schema";
+import { GetProductListQuery } from "../dto/product.interface";
+import { ProductAttributesForList } from "../dto/product.contant";
 
 
 
 
 @Injectable()
-export class UserRepository extends BaseRepository<User>{
+export class ProductRepository extends BaseRepository<Product>{
     constructor(
-        @InjectModel(User.name)
-        private readonly UserModel: Model<UserDocument>,
+        @InjectModel(Product.name)
+        private readonly ProductModel: Model<ProductDocument>,
     ) {
-        super(UserModel);
+        super(ProductModel);
     }
 
 
-    async findAllAndCountUserByQuery(query: GetUserListQuery) {
+    async findAllAndCountUserByQuery(query: GetProductListQuery) {
         try {
             const {
                 keyword = '',
@@ -46,7 +47,7 @@ export class UserRepository extends BaseRepository<User>{
 
  
 
-            const [result] = await this.UserModel.aggregate([
+            const [result] = await this.ProductModel.aggregate([
                 {
                     $addFields: {
                         id: { $toString: '$_id' },
@@ -58,7 +59,7 @@ export class UserRepository extends BaseRepository<User>{
                     },
                 },
                 {
-                    $project: parseMongoProjection(UserAttributesForList),
+                    $project: parseMongoProjection(ProductAttributesForList),
                 },
                 {
                     $facet: {
@@ -92,7 +93,7 @@ export class UserRepository extends BaseRepository<User>{
             };
         } catch (error) {
             this.logger.error(
-                'Error in ProductRepository findAllAndCountUserByQuery: ' + error,
+                'Error in ProductRepository findAllAndCountProductByQuery: ' + error,
             );
             throw error;
         }

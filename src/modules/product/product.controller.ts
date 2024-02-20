@@ -33,8 +33,6 @@ export class ProductController extends BaseController{
     async createProduct(@Body(new TrimBodyPipe()) dto: createProductDto,@UploadedFile() file: Express.Multer.File)
     {
         try{
-            console.log(dto);
-            console.log(file);
             file !=null ? dto.image=await this.productService.uploadImageToCloudinary(file) : dto.image='';
             const result=await this.productService._createProduct(dto)
             return new SuccessResponse(result)

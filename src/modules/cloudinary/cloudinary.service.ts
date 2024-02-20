@@ -45,7 +45,6 @@ export class CloudinaryService {
         throw new BadRequestException('Failed to delete image from Cloudinary.');
       }
   
-      console.log('Image deleted successfully.');
       return true;
     } catch (error) {
       console.error('Error deleting image from Cloudinary:', error);

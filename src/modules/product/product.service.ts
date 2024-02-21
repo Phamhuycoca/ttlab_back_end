@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { BaseService } from 'src/common/base/base.service';
-import { Product } from 'src/database/schemas/product.schema';
+import { BaseService } from '../../common/base/base.service';
+import { Product } from '../../database/schemas/product.schema';
 import { ProductRepository } from './repository/product.repository';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { GetProductListQuery, createProductDto, updateProductDto } from './dto/product.interface';

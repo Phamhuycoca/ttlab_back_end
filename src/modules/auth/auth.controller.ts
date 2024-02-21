@@ -2,9 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { LoginDto } from './dto/auth.interface';
-import { TrimBodyPipe } from 'src/common/helper/pipe/trim.body.pipe';
-import { BaseController } from 'src/common/base/base.controller';
-import { SuccessResponse } from 'src/common/helper/response';
+import { TrimBodyPipe } from '../../common/helper/pipe/trim.body.pipe';
+import { BaseController } from '../../common/base/base.controller';
+import { SuccessResponse } from '../../common/helper/response';
 
 @Controller('auth')
 export class AuthController extends BaseController{

@@ -1,17 +1,17 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put, HttpException, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { BaseController } from 'src/common/base/base.controller';
+import { BaseController } from '../../common/base/base.controller';
 import { GetProductListQuery, createProductDto, updateProductDto } from './dto/product.interface';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { TrimBodyPipe } from 'src/common/helper/pipe/trim.body.pipe';
-import { ErrorResponse, SuccessResponse } from 'src/common/helper/response';
-import { toObjectId } from 'src/common/helper/commonFunction';
-import { HttpStatus, RoleCollection } from 'src/common/constants';
-import { AuthGuard } from '../auth/auth.guard';
-import { RolesGuard } from '../auth/role.guard';
-import { Role } from 'src/common/decorator/roles.decorator';
-import { LoggedInUser } from 'src/common/decorator/loggedInUser.decorator';
+import { TrimBodyPipe } from '../../common/helper/pipe/trim.body.pipe';
+import { ErrorResponse, SuccessResponse } from '../../common/helper/response';
+import { toObjectId } from '../../common/helper/commonFunction';
+import { HttpStatus, RoleCollection } from '../../common/constants';
+import { AuthGuard } from '../auth/guard/auth.guard';
+import { RolesGuard } from '../auth/guard/role.guard';
+import { Role } from '../../common/decorator/roles.decorator';
+import { LoggedInUser } from '../../common/decorator/loggedInUser.decorator';
 
 @Controller('product')
 export class ProductController extends BaseController{

@@ -10,8 +10,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBody, ApiOperation } from "@nestjs/swagger";
 import { HttpStatus, RoleCollection } from "src/common/constants";
 import { Role } from "src/common/decorator/roles.decorator";
-import { AuthGuard } from "../auth/auth.guard";
-import { RolesGuard } from "../auth/role.guard";
+import { AuthGuard } from "../auth/guard/auth.guard";
+import { RolesGuard } from "../auth/guard/role.guard";
 
 
 @Controller('user')

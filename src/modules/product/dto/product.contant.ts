@@ -1,4 +1,4 @@
-import { Product } from "src/database/schemas/product.schema";
+import { Product } from "../../../database/schemas/product.schema";
 
 export enum ProoductOrderBy {
     ID = 'id',

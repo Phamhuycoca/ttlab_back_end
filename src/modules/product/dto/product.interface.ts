@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber } from "class-validator";
-import { CommonListQuery } from "src/common/interfaces";
+import { CommonListQuery } from "../../../common/interfaces";
 import { ProoductOrderBy } from "./product.contant";
 export class createProductDto{
     @IsNotEmpty({message:'Vui lòng nhập đầy đủ thông tin'})

@@ -4,11 +4,11 @@ import { ProductController } from './product.controller';
 import { ProductRepository } from './repository/product.repository';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Product, ProductSchema } from 'src/database/schemas/product.schema';
+import { Product, ProductSchema } from '../../database/schemas/product.schema';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { UserRepository } from '../user/repository/user.repository';
-import { User, UserSchema } from 'src/database/schemas/user.schema';
+import { User, UserSchema } from '../../database/schemas/user.schema';
 
 @Module({
   imports: [

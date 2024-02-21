@@ -5,6 +5,10 @@ import { ProductRepository } from './repository/product.repository';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from 'src/database/schemas/product.schema';
+import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
+import { UserRepository } from '../user/repository/user.repository';
+import { User, UserSchema } from 'src/database/schemas/user.schema';
 
 @Module({
   imports: [
@@ -12,8 +16,11 @@ import { Product, ProductSchema } from 'src/database/schemas/product.schema';
     MongooseModule.forFeature([
         { name: Product.name, schema: ProductSchema },
     ]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+  ]),
 ],
   controllers: [ProductController],
-  providers: [ProductService,ProductRepository],
+  providers: [ProductService,ProductRepository,JwtService,UserService,UserRepository],
 })
 export class ProductModule {}

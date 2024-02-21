@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { BaseController } from "src/common/base/base.controller";
 import { UserService } from "./user.service";
 import { GetUserListQuery, UpdateUserDto, createUserDto } from "./dto/user.interface";
@@ -8,7 +8,10 @@ import mongoose from "mongoose";
 import { toObjectId } from "src/common/helper/commonFunction";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBody, ApiOperation } from "@nestjs/swagger";
-import { HttpStatus } from "src/common/constants";
+import { HttpStatus, RoleCollection } from "src/common/constants";
+import { Role } from "src/common/decorator/roles.decorator";
+import { AuthGuard } from "../auth/auth.guard";
+import { RolesGuard } from "../auth/role.guard";
 
 
 @Controller('user')
@@ -18,6 +21,8 @@ export class UserController extends BaseController{
     ) {
         super();
     }
+    @Role(RoleCollection.Admin)
+    @UseGuards(AuthGuard, RolesGuard)
     @Get()
     async getAllUser(@Query()query :GetUserListQuery)
     {

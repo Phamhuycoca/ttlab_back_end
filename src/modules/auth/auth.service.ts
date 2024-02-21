@@ -1,48 +1,55 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { BaseService } from 'src/common/base/base.service';
-import { User } from 'src/database/schemas/user.schema';
-import { AuthRepository } from './repository/auth.repository';
+import { Injectable } from "@nestjs/common";
+import { BaseService } from "../../common/base/base.service";
+import { User } from "../../database/schemas/user.schema";
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from './dto/auth.interface';
-import { jwtConstants } from 'src/common/constants';
+import { jwtConstants } from "../../common/constants";
+import { AuthRepository } from "./repository/auth.repository";
+import { LoginDto } from "./dto/auth.interface";
 
 @Injectable()
-export class AuthService extends BaseService<User,AuthRepository>{
+export class AuthService extends BaseService<User,AuthRepository>
+{
     constructor(
         private readonly authRepository: AuthRepository,
         private jwtService: JwtService,
     ) {
         super(authRepository);
     }
-
-    async login(dto:LoginDto){
-        try{
-            const user = await this.authRepository.findOne(dto);
-            if (user?.password !==dto.password) {
-                throw new UnauthorizedException();
-            }
-            const payload = { sub: user._id, email: user.email, roles: user.role };
-            const accessToken = this.jwtService.sign(payload, {
-                secret: jwtConstants.secret,
-                expiresIn: jwtConstants.expiresIn,
-            });
-            const refreshToken = this.jwtService.sign(payload, {
-                secret: jwtConstants.secret,
-                expiresIn: jwtConstants.refresh_expiresIn,
-            });
+    async Login(dto:LoginDto)
+    {
+        try
+        {
+            const data=await this.authRepository.findOne(dto);
+        if(!data)
+            return null
+            const access_token = await this.jwtService.signAsync(
+                { data },
+                {
+                    secret: jwtConstants.secret,
+                    expiresIn: jwtConstants.expiresIn,
+                },
+            );
+            const refresh_token = await this.jwtService.signAsync(
+                { data },
+                {
+                    secret: jwtConstants.secret,
+                    expiresIn: jwtConstants.refresh_expiresIn,
+                },
+            );
             return {
-               data:{
-                accessToken: accessToken,
-                expiresIn: jwtConstants.expiresIn,
-                refresh_token: refreshToken,
-                refresh_expiresIn:jwtConstants.refresh_expiresIn,
-                profile:{
-                    role:user.role,
-                }
-               }
+                data:{
+                    accessToken: access_token,
+                    expiresIn: jwtConstants.expiresIn,
+                    refresh_token: refresh_token,
+                    refresh_expiresIn:jwtConstants.refresh_expiresIn,
+                    profile:{
+                        role:data.role,
+                    }
+                   }
             };
-        }catch(error){
-            this.logger.error('Error in Login: ' + error);
+        }catch(error)
+        {
+            this.logger.error('Error in autherService login: ' + error);
             throw error;
         }
     }

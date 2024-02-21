@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put, HttpException, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { BaseController } from 'src/common/base/base.controller';
 import { GetProductListQuery, createProductDto, updateProductDto } from './dto/product.interface';
@@ -7,14 +7,19 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { TrimBodyPipe } from 'src/common/helper/pipe/trim.body.pipe';
 import { ErrorResponse, SuccessResponse } from 'src/common/helper/response';
 import { toObjectId } from 'src/common/helper/commonFunction';
-import { HttpStatus } from 'src/common/constants';
+import { HttpStatus, RoleCollection } from 'src/common/constants';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../auth/role.guard';
+import { Role } from 'src/common/decorator/roles.decorator';
+import { LoggedInUser } from 'src/common/decorator/loggedInUser.decorator';
 
 @Controller('product')
 export class ProductController extends BaseController{
   constructor(private readonly productService: ProductService) {
     super();
   }
-
+  @Role(RoleCollection.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
   @Get()
     async getAllProduct(@Query()query :GetProductListQuery)
     {
@@ -30,7 +35,7 @@ export class ProductController extends BaseController{
     @ApiBody({ type:  createProductDto})
     @Post()
     @UseInterceptors(FileInterceptor('file'))
-    async createProduct(@Body(new TrimBodyPipe()) dto: createProductDto,@UploadedFile() file: Express.Multer.File)
+    async createProduct(@Body(new TrimBodyPipe()) dto: createProductDto,@UploadedFile() file: Express.Multer.File,@LoggedInUser() loggedInUser)
     {
         try{
             file !=null ? dto.image=await this.productService.uploadImageToCloudinary(file) : dto.image='';
@@ -45,7 +50,7 @@ export class ProductController extends BaseController{
     @UseInterceptors(FileInterceptor('file'))
     async updateProduct(@Param('id')id:string,
     @Body(new TrimBodyPipe())
-    dto:updateProductDto, @UploadedFile() file: Express.Multer.File)
+    dto:updateProductDto, @UploadedFile() file: Express.Multer.File,@LoggedInUser() loggedInUser)
     {
         try
         {

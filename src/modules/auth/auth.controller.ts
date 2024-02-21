@@ -17,7 +17,7 @@ export class AuthController extends BaseController{
   @ApiOperation({ summary: 'Login' })
   async Login(@Body(new TrimBodyPipe()) dto:LoginDto){
     try{
-      return await this.authService.login(dto);
+      return await this.authService.Login(dto);
     }catch(error){
       this.handleError(error);
     }

@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { FilterQuery, Model } from "mongoose";
-import { BaseRepository } from "src/common/base/base.repository";
-import { User, UserDocument } from "src/database/schemas/user.schema";
-import { DEFAULT_FIRST_PAGE, DEFAULT_LIMIT_FOR_PAGINATION, DEFAULT_ORDER_BY, DEFAULT_ORDER_DIRECTION,OrderDirection,softDeleteCondition } from "src/common/constants";
-import { parseMongoProjection } from "src/common/helper/commonFunction";
-import { Product, ProductDocument } from "src/database/schemas/product.schema";
+import { BaseRepository } from "../../../common/base/base.repository";
+import { User, UserDocument } from "../../../database/schemas/user.schema";
+import { DEFAULT_FIRST_PAGE, DEFAULT_LIMIT_FOR_PAGINATION, DEFAULT_ORDER_BY, DEFAULT_ORDER_DIRECTION,OrderDirection,softDeleteCondition } from "../../../common/constants";
+import { parseMongoProjection } from "../../../common/helper/commonFunction";
+import { Product, ProductDocument } from "../../../database/schemas/product.schema";
 import { GetProductListQuery } from "../dto/product.interface";
 import { ProductAttributesForList } from "../dto/product.contant";
 

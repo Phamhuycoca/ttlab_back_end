@@ -4,7 +4,6 @@ import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { LoginDto } from './dto/auth.interface';
 import { TrimBodyPipe } from '../../common/helper/pipe/trim.body.pipe';
 import { BaseController } from '../../common/base/base.controller';
-import { SuccessResponse } from '../../common/helper/response';
 
 @Controller('auth')
 export class AuthController extends BaseController{
@@ -21,5 +20,10 @@ export class AuthController extends BaseController{
     }catch(error){
       this.handleError(error);
     }
+  }
+  @Get('token')
+  getToken(){
+    console.log('returning token');
+    
   }
 }

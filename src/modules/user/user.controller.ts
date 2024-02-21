@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
-import { BaseController } from "src/common/base/base.controller";
+import { BaseController } from "../../common/base/base.controller";
 import { UserService } from "./user.service";
 import { GetUserListQuery, UpdateUserDto, createUserDto } from "./dto/user.interface";
-import { TrimBodyPipe } from "src/common/helper/pipe/trim.body.pipe";
-import { ErrorResponse, SuccessResponse } from "src/common/helper/response";
+import { TrimBodyPipe } from "../../common/helper/pipe/trim.body.pipe";
+import { ErrorResponse, SuccessResponse } from "../../common/helper/response";
 import mongoose from "mongoose";
-import { toObjectId } from "src/common/helper/commonFunction";
+import { toObjectId } from "../../common/helper/commonFunction";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBody, ApiOperation } from "@nestjs/swagger";
-import { HttpStatus, RoleCollection } from "src/common/constants";
-import { Role } from "src/common/decorator/roles.decorator";
+import { HttpStatus, RoleCollection } from "../../common/constants";
+import { Role } from "../../common/decorator/roles.decorator";
 import { AuthGuard } from "../auth/guard/auth.guard";
 import { RolesGuard } from "../auth/guard/role.guard";
 
@@ -21,8 +21,8 @@ export class UserController extends BaseController{
     ) {
         super();
     }
-    @Role(RoleCollection.Admin)
-    @UseGuards(AuthGuard, RolesGuard)
+    // @Role(RoleCollection.Admin)
+    // @UseGuards(AuthGuard, RolesGuard)
     @Get()
     async getAllUser(@Query()query :GetUserListQuery)
     {

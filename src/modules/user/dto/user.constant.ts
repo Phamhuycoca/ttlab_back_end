@@ -1,4 +1,4 @@
-import { User } from "src/database/schemas/user.schema";
+import { User } from "../../../database/schemas/user.schema";
 
 export enum UserOrderBy {
     ID = 'id',

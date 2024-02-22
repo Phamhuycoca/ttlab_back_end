@@ -97,4 +97,13 @@ export class UserRepository extends BaseRepository<User>{
             throw error;
         }
     }
+    async findEmail(email: string): Promise<User> {
+        try {
+          const user = await this.UserModel.findOne({ email }).exec();
+          return user;
+        } catch (error) {
+          console.error(`Error finding user: ${error}`);
+          throw new Error('Failed to find user');
+        }
+      }
 }

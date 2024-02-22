@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { BaseController } from "../../common/base/base.controller";
 import { UserService } from "./user.service";
 import { GetUserListQuery, UpdateUserDto, createUserDto } from "./dto/user.interface";
@@ -40,9 +40,12 @@ export class UserController extends BaseController{
     async createUser(@Body(new TrimBodyPipe()) dto: createUserDto,@UploadedFile() file: Express.Multer.File)
     {
         try{
+           if(!this.UserService.checkEmail(dto.email)){
             file !=null ? dto.avatar=await this.UserService.uploadImageToCloudinary(file) : dto.avatar='';
             const result=await this.UserService._createUser(dto)
             return new SuccessResponse(result)
+           }
+           throw new BadRequestException('Email đã tồn tại');
         }catch (error) {
             this.handleError(error);
         }

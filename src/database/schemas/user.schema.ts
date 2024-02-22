@@ -19,10 +19,10 @@ export class User extends MongoBaseSchema {
     name?: string;
 
     @Prop({unique:true, required: true, type: String })
-    email?: string;
+    email: string;
 
     @Prop({ required: true, type: String })
-    password?: string;
+    password: string;
 
     @Prop({ type: String })
     birthday?: string;

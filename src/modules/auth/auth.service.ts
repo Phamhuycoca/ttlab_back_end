@@ -6,12 +6,14 @@ import { jwtConstants } from "../../common/constants";
 import { AuthRepository } from "./repository/auth.repository";
 import { LoginDto } from "./dto/auth.interface";
 import * as jwt from 'jsonwebtoken';
+import { UserRepository } from './../user/repository/user.repository';
 @Injectable()
 export class AuthService extends BaseService<User,AuthRepository>
 {
     constructor(
         private readonly authRepository: AuthRepository,
         private jwtService: JwtService,
+        private readonly userRepository:UserRepository
     ) {
         super(authRepository);
     }
@@ -19,7 +21,7 @@ export class AuthService extends BaseService<User,AuthRepository>
     {
         try
         {
-            const data=await this.authRepository.findOne(dto);
+        const data=await this.authRepository.findOne(dto);
         if(!data)
             return null
             const access_token = await this.jwtService.signAsync(
@@ -53,21 +55,25 @@ export class AuthService extends BaseService<User,AuthRepository>
             throw error;
         }
     }
-
+   
+      
     async generateRefreshToken(data: any){
         try{
             const access_token = await this.jwtService.signAsync(
                 { data },
                 {
                     secret: jwtConstants.secret,
-                    expiresIn: jwtConstants.expiresIn,
+                    expiresIn: jwtConstants.refresh_expiresIn,
                 },
             );
             return {
                 data:{
                     accessToken: access_token,
-                    expiresIn: jwtConstants.expiresIn,
-                   }
+                    expiresIn: jwtConstants.refresh_expiresIn,
+                    profile:{
+                        role:data.data.role,
+                    }
+                }
             };
         }catch(error){
             this.logger.error('Error in refresh token',error);
@@ -82,8 +88,18 @@ export class AuthService extends BaseService<User,AuthRepository>
           return null;
         }
       }
-    // Sendrefresh_token(refresh_token:string):Promise<string>{
-    //     const token ='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-    //     return token;
-    // }
+      async checkEmail(email:string) {
+        try {
+          const result = await this.userRepository.findEmail(email);
+          if(result) {
+            return true;
+          }
+          return false;
+        } catch (error) {
+          this.logger.error(
+            'Error in UserService checkEmail: ' + error,
+          );
+          throw error;
+        }
+      }
 }

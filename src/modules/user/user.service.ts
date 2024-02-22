@@ -6,6 +6,7 @@ import { Types } from 'mongoose';
 import { UserAttributesForList } from './dto/user.constant';
 import { UserRepository } from './repository/user.repository';
 import { CloudinaryService } from './../cloudinary/cloudinary.service';
+import e from 'express';
 
 @Injectable()
 export class UserService extends BaseService<User, UserRepository> {
@@ -75,6 +76,7 @@ export class UserService extends BaseService<User, UserRepository> {
     }
 }
 
+
 async _findAllAndCountUserByQuery(query: GetUserListQuery) {
   try {
       const result =await this.userRepository.findAllAndCountUserByQuery(query);
@@ -86,4 +88,19 @@ async _findAllAndCountUserByQuery(query: GetUserListQuery) {
       throw error;
   }
 }
+async checkEmail(email:string) {
+  try {
+    const result = await this.userRepository.findEmail(email);
+    if(result) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    this.logger.error(
+      'Error in UserService checkEmail: ' + error,
+    );
+    throw error;
+  }
+}
+
 }

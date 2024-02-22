@@ -1,4 +1,4 @@
-import { IsNotEmpty,IsString, Matches } from "class-validator";
+import { IsNotEmpty,IsOptional,IsString, Matches } from "class-validator";
 import { CommonListQuery } from "../../../common/interfaces";
 import { UserOrderBy } from "./user.constant";
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;

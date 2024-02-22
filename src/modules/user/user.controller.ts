@@ -21,8 +21,8 @@ export class UserController extends BaseController{
     ) {
         super();
     }
-    // @Role(RoleCollection.Admin)
-    // @UseGuards(AuthGuard, RolesGuard)
+            // @Role(RoleCollection.Admin)
+            // @UseGuards(AuthGuard, RolesGuard)
     @Get()
     async getAllUser(@Query()query :GetUserListQuery)
     {

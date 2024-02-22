@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from "../../common/constants";
 import { AuthRepository } from "./repository/auth.repository";
 import { LoginDto } from "./dto/auth.interface";
-
+import * as jwt from 'jsonwebtoken';
 @Injectable()
 export class AuthService extends BaseService<User,AuthRepository>
 {
@@ -53,4 +53,37 @@ export class AuthService extends BaseService<User,AuthRepository>
             throw error;
         }
     }
+
+    async generateRefreshToken(data: any){
+        try{
+            const access_token = await this.jwtService.signAsync(
+                { data },
+                {
+                    secret: jwtConstants.secret,
+                    expiresIn: jwtConstants.expiresIn,
+                },
+            );
+            return {
+                data:{
+                    accessToken: access_token,
+                    expiresIn: jwtConstants.expiresIn,
+                   }
+            };
+        }catch(error){
+            this.logger.error('Error in refresh token',error);
+            throw error;
+        }
+      }
+
+    verifyToken(token: string): any {
+        try {
+          return jwt.verify(token, jwtConstants.secret);
+        } catch (error) {
+          return null;
+        }
+      }
+    // Sendrefresh_token(refresh_token:string):Promise<string>{
+    //     const token ='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+    //     return token;
+    // }
 }

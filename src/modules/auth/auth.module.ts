@@ -8,6 +8,8 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { jwtConstants } from '../../common/constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserRepository } from '../user/repository/user.repository';
+import { UserService } from '../user/user.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Module({
   imports:[
@@ -20,6 +22,6 @@ import { UserRepository } from '../user/repository/user.repository';
   }),
   ],
   controllers: [AuthController],
-  providers: [AuthService,AuthRepository,JwtService,JwtStrategy,UserRepository],
+  providers: [AuthService,AuthRepository,JwtService,JwtStrategy,UserRepository,UserService,CloudinaryService],
 })
 export class AuthModule {}

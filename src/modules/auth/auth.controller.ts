@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, HttpException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { LoginDto } from './dto/auth.interface';
@@ -6,10 +6,16 @@ import { TrimBodyPipe } from '../../common/helper/pipe/trim.body.pipe';
 import { BaseController } from '../../common/base/base.controller';
 import { ErrorResponse, SuccessResponse } from 'src/common/helper/response';
 import { BadRequestException } from '@nestjs/common';
+import { Role } from 'src/common/decorator/roles.decorator';
+import { RoleCollection,HttpStatus } from 'src/common/constants';
+import { AuthGuard } from "../auth/guard/auth.guard";
+import { RolesGuard } from './guard/role.guard';
+import { LoggedInUser } from 'src/common/decorator/loggedInUser.decorator';
+import { UserService } from './../user/user.service';
 
 @Controller('auth')
 export class AuthController extends BaseController{
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly authService: AuthService,private readonly UserService:UserService) {
     super();
   }
 
@@ -31,12 +37,12 @@ export class AuthController extends BaseController{
       this.handleError(error);
     }
   }
-
-  @Get('token')
-  async sendRefreshToken(@Body('refresh_token') refreshToken: string) {
+  @Post('refresh')
+  async sendRefreshToken(@Body() body: any) {
    try{
-    const decodedToken = this.authService.verifyToken(refreshToken);
-    console.log(decodedToken);
+      console.log('Refresh token');
+     console.log(body.refresh_token);
+    const decodedToken = this.authService.verifyToken(body.refresh_token);
     if (decodedToken) {
       const newRefreshToken =await this.authService.generateRefreshToken(decodedToken);
       return new SuccessResponse(newRefreshToken);
@@ -46,6 +52,26 @@ export class AuthController extends BaseController{
    }catch(error){
     this.handleError(error);
    }
-
+  }
+  @Role(RoleCollection.Admin || RoleCollection.USERS)
+  @UseGuards(AuthGuard,RolesGuard)
+  @Get('user')
+  async getUser(@LoggedInUser() loggedInUser)
+  {
+      try{
+          const id=loggedInUser.data.id;
+          console.log(id);
+          const result = await this.UserService._findUserById(id);
+          if (!result) {
+              return new ErrorResponse(
+                  HttpStatus.ITEM_NOT_FOUND,
+                   "User not found"
+              );
+          }
+          return new SuccessResponse(result);
+      }catch(error)
+      {
+          this.handleError(error);
+      }
   }
 }

@@ -67,13 +67,11 @@ export class AuthService extends BaseService<User,AuthRepository>
                 },
             );
             return {
-                data:{
                     accessToken: access_token,
                     expiresIn: jwtConstants.refresh_expiresIn,
                     profile:{
                         role:data.data.role,
                     }
-                }
             };
         }catch(error){
             this.logger.error('Error in refresh token',error);

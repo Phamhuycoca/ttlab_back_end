@@ -12,6 +12,7 @@ import { HttpStatus, RoleCollection } from "../../common/constants";
 import { Role } from "../../common/decorator/roles.decorator";
 import { AuthGuard } from "../auth/guard/auth.guard";
 import { RolesGuard } from "../auth/guard/role.guard";
+import { LoggedInUser } from "src/common/decorator/loggedInUser.decorator";
 
 
 @Controller('user')
@@ -40,6 +41,7 @@ export class UserController extends BaseController{
     async createUser(@Body(new TrimBodyPipe()) dto: createUserDto,@UploadedFile() file: Express.Multer.File)
     {
         try{
+            console.log(this.UserService.checkEmail(dto.email));
            if(!this.UserService.checkEmail(dto.email)){
             file !=null ? dto.avatar=await this.UserService.uploadImageToCloudinary(file) : dto.avatar='';
             const result=await this.UserService._createUser(dto)
@@ -121,4 +123,5 @@ export class UserController extends BaseController{
 
       }
     }
+   
   }

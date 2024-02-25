@@ -27,14 +27,16 @@ import { UserService } from '../../user/user.service';
             secret: jwtConstants.secret
           }
           );
-        //check tồn tại userId
         const user=await this.userService._findUserById(payload.data.id)
+        // console.log(user);
         if(!user)
         {
           throw new UnauthorizedException();
         }
-        request.loggedInUser=payload
+        // console.log(payload.data);
+        request.loggedInUser=payload.data
         request.userToken=token
+        // console.log(request.loggedInUser)
       } catch {
         throw new HttpException({
             status: 419,

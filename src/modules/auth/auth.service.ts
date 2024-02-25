@@ -57,8 +57,9 @@ export class AuthService extends BaseService<User,AuthRepository>
     }
    
       
-    async generateRefreshToken(data: any){
+    async generateRefreshToken(res: any){
         try{
+            const data = res.data;
             const access_token = await this.jwtService.signAsync(
                 { data },
                 {
@@ -67,11 +68,13 @@ export class AuthService extends BaseService<User,AuthRepository>
                 },
             );
             return {
-                    accessToken: access_token,
-                    expiresIn: jwtConstants.refresh_expiresIn,
-                    profile:{
-                        role:data.data.role,
-                    }
+                    data:{
+                        accessToken: access_token,
+                        expiresIn: jwtConstants.refresh_expiresIn,
+                        profile:{
+                            role:data.role,
+                        }
+                       }
             };
         }catch(error){
             this.logger.error('Error in refresh token',error);
@@ -79,9 +82,9 @@ export class AuthService extends BaseService<User,AuthRepository>
         }
       }
 
-    verifyToken(token: string): any {
+    async verifyToken(token: string){
         try {
-          return jwt.verify(token, jwtConstants.secret);
+          return await jwt.verify(token, jwtConstants.secret);
         } catch (error) {
           return null;
         }

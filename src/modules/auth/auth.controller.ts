@@ -27,7 +27,7 @@ export class AuthController extends BaseController{
       if(await this.authService.checkEmail(dto.email)){
         const res= await this.authService.Login(dto);
         if(res!=null){
-          return res;
+            return new SuccessResponse(res);
         }
         throw new BadRequestException('Tài khoản mật khẩu không chính xác');
       }
@@ -40,9 +40,7 @@ export class AuthController extends BaseController{
   @Post('refresh')
   async sendRefreshToken(@Body() body: any) {
    try{
-      console.log('Refresh token');
-     console.log(body.refresh_token);
-    const decodedToken = this.authService.verifyToken(body.refresh_token);
+    const decodedToken =await this.authService.verifyToken(body.refresh_token);
     if (decodedToken) {
       const newRefreshToken =await this.authService.generateRefreshToken(decodedToken);
       return new SuccessResponse(newRefreshToken);
@@ -60,7 +58,6 @@ export class AuthController extends BaseController{
   {
       try{
           const id=loggedInUser.data.id;
-          console.log(id);
           const result = await this.UserService._findUserById(id);
           if (!result) {
               return new ErrorResponse(

@@ -22,8 +22,8 @@ export class UserController extends BaseController{
     ) {
         super();
     }
-            // @Role(RoleCollection.Admin)
-            // @UseGuards(AuthGuard, RolesGuard)
+            @Role(RoleCollection.Admin)
+            @UseGuards(AuthGuard, RolesGuard)
     @Get()
     async getAllUser(@Query()query :GetUserListQuery)
     {
@@ -34,6 +34,8 @@ export class UserController extends BaseController{
             this.handleError(error);
         }
     }
+    // @Role(RoleCollection.Admin)
+    // @UseGuards(AuthGuard, RolesGuard)
     @ApiOperation({ summary: 'Create User' })
     @ApiBody({ type: createUserDto })
     @Post()
@@ -41,8 +43,8 @@ export class UserController extends BaseController{
     async createUser(@Body(new TrimBodyPipe()) dto: createUserDto,@UploadedFile() file: Express.Multer.File)
     {
         try{
-            console.log(this.UserService.checkEmail(dto.email));
-           if(!this.UserService.checkEmail(dto.email)){
+            // console.log(await this.UserService.checkEmail(dto.email));
+           if(!await this.UserService.checkEmail(dto.email)){
             file !=null ? dto.avatar=await this.UserService.uploadImageToCloudinary(file) : dto.avatar='';
             const result=await this.UserService._createUser(dto)
             return new SuccessResponse(result)

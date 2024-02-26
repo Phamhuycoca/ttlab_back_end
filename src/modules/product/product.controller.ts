@@ -18,8 +18,8 @@ export class ProductController extends BaseController{
   constructor(private readonly productService: ProductService) {
     super();
   }
-  @Role(RoleCollection.Admin)
-  @UseGuards(AuthGuard,RolesGuard)
+//   @Role(RoleCollection.Admin)
+//   @UseGuards(AuthGuard,RolesGuard)
   @Get()
     async getAllProduct(@Query()query :GetProductListQuery)
     {

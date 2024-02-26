@@ -9,6 +9,7 @@ import {
   import { jwtConstants } from '../../../common/constants';
   import { Request } from 'express';
 import { UserService } from '../../user/user.service';
+import { LoggedInUser } from './../../../common/decorator/loggedInUser.decorator';
   
   @Injectable()
   export class AuthGuard implements CanActivate {
@@ -35,8 +36,9 @@ import { UserService } from '../../user/user.service';
         }
         // console.log(payload.data);
         request.loggedInUser=payload.data
-        request.userToken=token
         // console.log(request.loggedInUser)
+        request.userToken=token
+        // console.log(request.userToken)
       } catch {
         throw new HttpException({
             status: 419,

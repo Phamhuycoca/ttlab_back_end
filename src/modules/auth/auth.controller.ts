@@ -42,7 +42,7 @@ export class AuthController extends BaseController{
    try{
     const decodedToken =await this.authService.verifyToken(body.refresh_token);
     if (decodedToken) {
-      const newRefreshToken =await this.authService.generateRefreshToken(decodedToken);
+      const newRefreshToken =await this.authService.refreshToken(body.refresh_token);
       return new SuccessResponse(newRefreshToken);
     } else {
       throw new UnauthorizedException('Invalid refresh token');
@@ -56,8 +56,11 @@ export class AuthController extends BaseController{
   @Get('user')
   async getUser(@LoggedInUser() loggedInUser)
   {
+    // console.log(loggedInUser.id);
       try{
-          const id=loggedInUser.data.id;
+        
+        // const id=loggedInUser.data.id;
+          const id=loggedInUser.id;
           const result = await this.UserService._findUserById(id);
           if (!result) {
               return new ErrorResponse(

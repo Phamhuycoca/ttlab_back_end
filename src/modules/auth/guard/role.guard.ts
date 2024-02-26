@@ -9,7 +9,7 @@ export class RolesGuard implements CanActivate {
       const request=context.switchToHttp().getRequest()
       const role= this.reflector.getAllAndMerge(ROLES_KEY,[context.getClass(),context.getHandler()])
       // console.log(role);
-      // console.log(request.loggedInUser.role)
+      // console.log('request',request.loggedInUser.role)
       if(role===request.loggedInUser.role)
       // if(role===request.loggedInUser.data.data.role)
           return true

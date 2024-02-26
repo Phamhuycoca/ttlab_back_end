@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { BaseService } from "../../common/base/base.service";
 import { User } from "../../database/schemas/user.schema";
 import { JwtService } from '@nestjs/jwt';
@@ -57,30 +57,31 @@ export class AuthService extends BaseService<User,AuthRepository>
     }
    
       
-    async generateRefreshToken(res: any){
-        try{
-            const data = res.data;
-            const access_token = await this.jwtService.signAsync(
-                { data },
-                {
-                    secret: jwtConstants.secret,
-                    expiresIn: jwtConstants.refresh_expiresIn,
-                },
-            );
-            return {
-                    data:{
-                        accessToken: access_token,
-                        expiresIn: jwtConstants.refresh_expiresIn,
-                        profile:{
-                            role:data.role,
-                        }
-                       }
-            };
-        }catch(error){
-            this.logger.error('Error in refresh token',error);
-            throw error;
-        }
-      }
+    // async generateRefreshToken(res: any){
+    //     try{
+    //         const data = res.data;
+    //         const access_token = await this.jwtService.signAsync(
+    //             { data },
+    //             {
+    //                 secret: jwtConstants.secret,
+    //                 expiresIn: jwtConstants.refresh_expiresIn,
+    //             },
+    //         );
+            
+    //         return {
+    //                 data:{
+    //                     accessToken: access_token,
+    //                     expiresIn: jwtConstants.refresh_expiresIn,
+    //                     profile:{
+    //                         role:data.role,
+    //                     }
+    //                    }
+    //         };
+    //     }catch(error){
+    //         this.logger.error('Error in refresh token',error);
+    //         throw error;
+    //     }
+    //   }
 
     async verifyToken(token: string){
         try {
@@ -101,6 +102,41 @@ export class AuthService extends BaseService<User,AuthRepository>
             'Error in UserService checkEmail: ' + error,
           );
           throw error;
+        }
+      }
+
+      async refreshToken(refreshtoken) {
+        try {
+            const {data} = await this.jwtService.verify(refreshtoken, {
+                secret: jwtConstants.secret,
+              });
+              const access_token = await this.jwtService.signAsync(
+                { data },
+                {
+                    secret: jwtConstants.secret,
+                    expiresIn: jwtConstants.expiresIn,
+                },
+            );
+            const refresh_token = await this.jwtService.signAsync(
+                { data },
+                {
+                    secret: jwtConstants.secret,
+                    expiresIn: jwtConstants.refresh_expiresIn,
+                },
+            );
+            return {
+                data:{
+                    accessToken: access_token,
+                    expiresIn: jwtConstants.expiresIn,
+                    refresh_token: refresh_token,
+                    refresh_expiresIn:jwtConstants.refresh_expiresIn,
+                    profile:{
+                        role:data.role,
+                    }
+                   }
+            }
+        } catch (e) {
+            throw new UnauthorizedException("Hết phiên đăng nhập. vui lòng đăng nhập lại");
         }
       }
 }

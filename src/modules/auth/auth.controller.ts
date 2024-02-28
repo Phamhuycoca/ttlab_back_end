@@ -74,4 +74,12 @@ export class AuthController extends BaseController{
           this.handleError(error);
       }
   }
+
+
+
+  @Post('forgot-password')
+  async forgotPassword(){
+    const randomPassword = this.authService.generateRandomPassword(8, '12345678a');
+console.log(randomPassword);
+  }
 }

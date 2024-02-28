@@ -5,26 +5,26 @@ const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   const numberRegex= /^[0-9]+$/;
 export class createProductDto{
     @IsString()
-    @IsNotEmpty({message:'Vui lòng nhập tên sản phẩm'})
+    // @IsNotEmpty({message:'Vui lòng nhập tên sản phẩm'})
     name?: string;
-    @Matches(numberRegex,({message:'Giá phải là số'}))
-    @IsNotEmpty({message:'Vui lòng nhập giá'})
+    // @Matches(numberRegex,({message:'Giá phải là số'}))
+    // @IsNotEmpty({message:'Vui lòng nhập giá'})
     price: number;
-    @Matches(numberRegex,({message:'Giá phải là số'}))
-    @IsNotEmpty({message:'Vui lòng nhập số lượng'})
+    // @Matches(numberRegex,({message:'Số lượng phải là số'}))
+    // @IsNotEmpty({message:'Vui lòng nhập số lượng'})
     quantity: number;
-    @IsString({message:'Chi tiết sản phẩm phải là chuỗi'})
+    // @IsString({message:'Chi tiết sản phẩm phải là chuỗi'})
     description?: string;
     image?: string;
 }
 export class updateProductDto{
-    @IsString({message:'Tên sản phẩm phải là chuỗi'})
+    // @IsString({message:'Tên sản phẩm phải là chuỗi'})
     name?: string;
-    @Matches(numberRegex,({message:'Giá phải là số'}))
+    // @Matches(numberRegex,({message:'Giá phải là số'}))
     price?: number;
-    @Matches(numberRegex,({message:'Số lượng phải là số'}))
+    // @Matches(numberRegex,({message:'Số lượng phải là số'}))
     quantity?: number;
-    @IsString({message:'Mô tả phải là chuỗi'})
+    // @IsString({message:'Mô tả phải là chuỗi'})
     description?: string;
     image?: string;
 }

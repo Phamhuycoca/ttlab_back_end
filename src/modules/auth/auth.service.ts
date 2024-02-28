@@ -46,6 +46,7 @@ export class AuthService extends BaseService<User,AuthRepository>
                     refresh_expiresIn:jwtConstants.refresh_expiresIn,
                     profile:{
                         role:data.role,
+                        avatar:data.avatar
                     }
                    }
             };
@@ -139,4 +140,20 @@ export class AuthService extends BaseService<User,AuthRepository>
             throw new UnauthorizedException("Hết phiên đăng nhập. vui lòng đăng nhập lại");
         }
       }
+
+       generateRandomPassword(passwordLength: number, defaultPassword: string = ''): string {
+        if (defaultPassword.length === passwordLength) {
+            return defaultPassword;
+        }
+    
+        const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let password = '';
+    
+        for (let i = 0; i < passwordLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            password += characters.charAt(randomIndex);
+        }
+        return password;
+    }
+    
 }

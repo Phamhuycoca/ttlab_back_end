@@ -69,10 +69,14 @@ export class ProductController extends BaseController{
                     this.productService.deleteImageByUrl(product.image);
                 }
             }
-            file !=null ? dto.image=await this.productService.uploadImageToCloudinary(file) : dto.image=product.image;
-            const result=await this.productService._updateProduct(toObjectId(id),dto);
-            if(result)
-                return new SuccessResponse(result)
+            if(!await this.productService.checkName(dto.name)){
+                file !=null ? dto.image=await this.productService.uploadImageToCloudinary(file) : dto.image=product.image;
+                const result=await this.productService._updateProduct(toObjectId(id),dto);
+                if(result)
+                    return new SuccessResponse(result)
+            }else{
+            throw new BadRequestException('Tên sản phẩm đã tồn tại');
+            }
             throw new HttpException("Update error",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         catch(error)

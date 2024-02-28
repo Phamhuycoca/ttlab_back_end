@@ -88,4 +88,18 @@ async _findAllAndCountProductByQuery(query: GetProductListQuery) {
       throw error;
   }
 }
+async checkName(name:string) {
+  try {
+    const result = await this.productRepository.findName(name);
+    if(result) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    this.logger.error(
+      'Error in ProductService checkName: ' + error,
+    );
+    throw error;
+  }
+}
 }

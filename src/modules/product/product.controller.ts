@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put, HttpException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put, HttpException, UseGuards, BadRequestException } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { BaseController } from '../../common/base/base.controller';
 import { GetProductListQuery, createProductDto, updateProductDto } from './dto/product.interface';
@@ -38,9 +38,12 @@ export class ProductController extends BaseController{
     async createProduct(@Body(new TrimBodyPipe()) dto: createProductDto,@UploadedFile() file: Express.Multer.File,@LoggedInUser() loggedInUser)
     {
         try{
-            file !=null ? dto.image=await this.productService.uploadImageToCloudinary(file) : dto.image='';
-            const result=await this.productService._createProduct(dto)
-            return new SuccessResponse(result)
+            if(!await this.productService.checkName(dto.name)){
+                file !=null ? dto.image=await this.productService.uploadImageToCloudinary(file) : dto.image='';
+                const result=await this.productService._createProduct(dto)
+                return new SuccessResponse(result)
+            }
+           throw new BadRequestException('Tên sản phẩm đã tồn tại');
         }catch (error) {
             this.handleError(error);
         }

@@ -29,9 +29,9 @@ export class AuthController extends BaseController{
         if(res!=null){
             return new SuccessResponse(res);
         }
-        throw new BadRequestException('Tài khoản mật khẩu không chính xác');
+        throw new UnauthorizedException('Tài khoản mật khẩu không chính xác');
       }
-      throw new BadRequestException('Email không tồn tại');
+      throw new UnauthorizedException('Email không tồn tại');
 
     }catch(error){
       this.handleError(error);

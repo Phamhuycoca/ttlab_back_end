@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { FilterQuery, Model } from "mongoose";
+import { FilterQuery, Model, Types } from "mongoose";
 import { BaseRepository } from "../../../common/base/base.repository";
 import { User, UserDocument } from "../../../database/schemas/user.schema";
 import { GetUserListQuery } from "../dto/user.interface";
@@ -21,7 +21,7 @@ export class UserRepository extends BaseRepository<User>{
     }
 
 
-    async findAllAndCountUserByQuery(query: GetUserListQuery) {
+    async findAllAndCountUserByQuery(query: GetUserListQuery,userId:string) {
         try {
             const {
                 keyword = '',
@@ -47,7 +47,11 @@ export class UserRepository extends BaseRepository<User>{
                     ]
                 });
             }
-
+            if (userId) {
+                matchQuery.$and.push({
+                    _id: { $ne: new Types.ObjectId(userId) }
+                });
+            }
  
 
             const [result] = await this.UserModel.aggregate([

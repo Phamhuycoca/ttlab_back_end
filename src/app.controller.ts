@@ -11,7 +11,7 @@ export class AppController {
   @UseGuards(AuthGuard,RolesGuard)
   @Get()
   getHello(@LoggedInUser() loggedInUser): string {
-    console.log(loggedInUser.data.id)
+    console.log(loggedInUser.id)
     return 'Hello'
   }
 }

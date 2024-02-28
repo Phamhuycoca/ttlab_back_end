@@ -98,4 +98,13 @@ export class ProductRepository extends BaseRepository<Product>{
             throw error;
         }
     }
+    async findName(name: string): Promise<Product> {
+        try {
+          const product = await this.ProductModel.findOne({ name }).exec();
+          return product;
+        } catch (error) {
+          console.error(`Error finding product: ${error}`);
+          throw new Error('Failed to find product');
+        }
+      }
 }

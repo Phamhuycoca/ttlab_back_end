@@ -23,19 +23,20 @@ export class UserController extends BaseController{
         super();
     }
             // @Role(RoleCollection.Admin)
-            // @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(AuthGuard)
     @Get()
-    async getAllUser(@Query()query :GetUserListQuery)
+    async getAllUser(@Query()query :GetUserListQuery,@LoggedInUser() loggedInUser)
     {
         try{
-            const result=await this.UserService._findAllAndCountUserByQuery(query);
+            const id =loggedInUser.id;
+            const result=await this.UserService._findAllAndCountUserByQuery(query,id);
             return new SuccessResponse(result);
         }catch(error){
             this.handleError(error);
         }
     }
-    // @Role(RoleCollection.Admin)
-    // @UseGuards(AuthGuard, RolesGuard)
+    @Role(RoleCollection.Admin)
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiOperation({ summary: 'Create User' })
     @ApiBody({ type: createUserDto })
     @Post()

@@ -90,7 +90,7 @@ async _findAllAndCountUserByQuery(query: GetUserListQuery,id:string) {
 }
 async checkEmail(email:string) {
   try {
-    const result = await this.userRepository.findEmail(email);
+    const result = await this.userRepository.findOne({email: email});
     if(result) {
       return true;
     }

@@ -90,7 +90,7 @@ async _findAllAndCountProductByQuery(query: GetProductListQuery) {
 }
 async checkName(name:string) {
   try {
-    const result = await this.productRepository.findName(name);
+    const result = await this.productRepository.findOne({name:name});
     if(result) {
       return true;
     }

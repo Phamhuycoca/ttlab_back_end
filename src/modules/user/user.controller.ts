@@ -75,15 +75,15 @@ export class UserController extends BaseController{
                     this.UserService.deleteImageByUrl(user.avatar);
                 }
             }
-           if(!await this.UserService.checkEmail(dto.email)){
+        //    if(!await this.UserService.checkEmail(dto.email)){
                file !=null ? dto.avatar=await this.UserService.uploadImageToCloudinary(file) : dto.avatar=user.avatar;
                const result=await this.UserService._updateUser(toObjectId(id),dto);
                if(result)
                return new SuccessResponse(result)
-            }else{
-           throw new BadRequestException('Email đã tồn tại');
+        //     }else{
+        //    throw new BadRequestException('Email đã tồn tại');
 
-            }
+            // }
             throw new HttpException("Update error",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         catch(error)

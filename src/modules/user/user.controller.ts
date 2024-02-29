@@ -70,6 +70,10 @@ export class UserController extends BaseController{
                      "User not found"
                 );
             }
+            if(user.email!==dto.email){
+                if(await this.UserService.checkEmail(dto.email))
+                throw new HttpException('Email đã tồn tại',HttpStatus.BAD_REQUEST);
+            }
             if(file !=null){
                 if(user.avatar!==''){
                     this.UserService.deleteImageByUrl(user.avatar);

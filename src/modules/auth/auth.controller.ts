@@ -78,8 +78,20 @@ export class AuthController extends BaseController{
 
 
   @Post('forgot-password')
-  async forgotPassword(){
-    const randomPassword = this.authService.generateRandomPassword(8, '12345678a');
-console.log(randomPassword);
+  async forgotPassword(@Body() body: any){
+    try{
+      const result = await this.UserService.checkEmail(body.email);
+      if(result){
+        const randomPassword = this.authService.generateRandomPassword();
+        console.log(randomPassword);
+      }
+      return new ErrorResponse(
+        HttpStatus.BAD_REQUEST,
+         "Email khong ton tai"
+    );
+    }catch(error){
+      this.handleError(error);
+
+    }
   }
 }

@@ -64,6 +64,10 @@ export class ProductController extends BaseController{
                      "Product not found"
                 );
             }
+            if(product.name!==dto.name){
+                if(await this.productService.checkName(dto.name))
+                throw new HttpException('Sản phẩm đã tồn tại',HttpStatus.BAD_REQUEST);
+            }
             if(file !=null){
                 if(product.image!==''){
                     this.productService.deleteImageByUrl(product.image);

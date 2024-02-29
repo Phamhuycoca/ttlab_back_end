@@ -10,6 +10,7 @@ import { UserRepository } from './../user/repository/user.repository';
 @Injectable()
 export class AuthService extends BaseService<User,AuthRepository>
 {
+    
     constructor(
         private readonly authRepository: AuthRepository,
         private jwtService: JwtService,
@@ -141,15 +142,11 @@ export class AuthService extends BaseService<User,AuthRepository>
         }
       }
 
-       generateRandomPassword(passwordLength: number, defaultPassword: string = ''): string {
-        if (defaultPassword.length === passwordLength) {
-            return defaultPassword;
-        }
-    
+       generateRandomPassword(): string {
         const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
         let password = '';
     
-        for (let i = 0; i < passwordLength; i++) {
+        for (let i = 0; i <= 8; i++) {
             const randomIndex = Math.floor(Math.random() * characters.length);
             password += characters.charAt(randomIndex);
         }

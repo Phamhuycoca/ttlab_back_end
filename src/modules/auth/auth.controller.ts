@@ -77,21 +77,22 @@ export class AuthController extends BaseController{
 
 
 
-  @Post('forgot-password')
-  async forgotPassword(@Body() body: any){
-    try{
-      const result = await this.UserService.checkEmail(body.email);
-      if(result){
-        const randomPassword = this.authService.generateRandomPassword();
-        console.log(randomPassword);
-      }
-      return new ErrorResponse(
-        HttpStatus.BAD_REQUEST,
-         "Email khong ton tai"
-    );
-    }catch(error){
-      this.handleError(error);
+  // @Post('forgot-password')
+  // async forgotPassword(@Body() body: any){
+  //   try{
+  //     const result = await this.UserService.checkEmail(body.email);
+  //     if(result){
+  //       const randomPassword = this.authService.generateRandomPassword();
+  //       console.log(randomPassword);
+  //     }
+  //     return new ErrorResponse(
+  //       HttpStatus.BAD_REQUEST,
+  //        "Email khong ton tai"
+  //   );
+  //   }catch(error){
+  //     this.handleError(error);
 
-    }
-  }
+  //   }
+  // }
+  
 }

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, HttpException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
-import { LoginDto } from './dto/auth.interface';
+import { LoginDto, forgotPassword } from './dto/auth.interface';
 import { TrimBodyPipe } from '../../common/helper/pipe/trim.body.pipe';
 import { BaseController } from '../../common/base/base.controller';
 import { ErrorResponse, SuccessResponse } from 'src/common/helper/response';
@@ -79,18 +79,19 @@ export class AuthController extends BaseController{
 
 
   @Post('forgot-password')
-  async forgotPassword(@Body() body: any){
+  async forgotPassword(@Body(new TrimBodyPipe()) dto:forgotPassword){
     try{
-      const result = await this.UserService.findUserByEmail(body.email);
+      const result = await this.UserService.findUserByEmail(dto.email);
       if(!result){
-        return new ErrorResponse(
-          HttpStatus.BAD_REQUEST,
-          "Không tìm thấy email"
-          );
+        throw new BadRequestException("Email không tồn tại");
+        // return new ErrorResponse(
+        //   HttpStatus.BAD_REQUEST,
+        //   "Không tìm thấy email"
+        //   );
         }
           const password=this.authService.generateRandomPassword();
           const updatePass=await this.UserService._updateUser(toObjectId(result.id),{password:password});
-          const send_email=await this.authService.sendEmail(body.email,password);
+          const send_email=await this.authService.sendEmail(dto.email,password);
           return new SuccessResponse(send_email);
     }catch(error){
       this.handleError(error);

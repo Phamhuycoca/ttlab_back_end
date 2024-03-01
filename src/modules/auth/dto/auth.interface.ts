@@ -8,3 +8,8 @@ export class LoginDto{
     @IsNotEmpty({ message: 'Vui lòng nhập đầy đủ thông tin' })
     password: string;
 }
+export class forgotPassword{
+    @Matches(emailRegex, { message: 'Email không đúng định dạng' })
+    @IsNotEmpty({message:'Vui lòng nhập đầy đủ thông tin'})
+    email: string;
+}

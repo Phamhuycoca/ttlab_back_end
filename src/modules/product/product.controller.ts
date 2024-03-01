@@ -49,7 +49,7 @@ export class ProductController extends BaseController{
         }
     }
     @UseGuards(AuthGuard)
-    @Put(':id')
+    @Patch(':id')
     @ApiOperation({ summary: 'Update Product' })
     @UseInterceptors(FileInterceptor('file'))
     async updateProduct(@Param('id')id:string,

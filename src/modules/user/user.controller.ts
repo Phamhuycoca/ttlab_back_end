@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, HttpException, Param, Patch, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { BaseController } from "../../common/base/base.controller";
 import { UserService } from "./user.service";
 import { GetUserListQuery, UpdateUserDto, createUserDto } from "./dto/user.interface";
@@ -57,7 +57,7 @@ export class UserController extends BaseController{
         }
     }
     
-    @Put(':id')
+    @Patch(':id')
     @UseInterceptors(FileInterceptor('file'))
     async updateUser(@Param('id')id:string,
     @Body(new TrimBodyPipe())

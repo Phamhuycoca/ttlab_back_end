@@ -10,6 +10,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserRepository } from '../user/repository/user.repository';
 import { UserService } from '../user/user.service';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { MailerModule, MailerService } from '@nestjs-modules/mailer';
 
 @Module({
   imports:[
@@ -20,6 +21,20 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
     secret: jwtConstants.secret,
     signOptions: { expiresIn: jwtConstants.expiresIn },
   }),
+      MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: 'huypk@tokyotechlab.com',
+          pass: 'nfgw itse vfkk tuah',
+        },
+      },
+      defaults: {
+        from: '"Xác nhận quên mật khẩu" <no-reply@example.com>',
+      },
+    })
   ],
   controllers: [AuthController],
   providers: [AuthService,AuthRepository,JwtService,JwtStrategy,UserRepository,UserService,CloudinaryService],

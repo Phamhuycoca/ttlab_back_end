@@ -30,7 +30,7 @@ export class ProductController extends BaseController{
             this.handleError(error);
         }
     }
-
+    @UseGuards(AuthGuard)
     @ApiOperation({ summary: 'Create Product' })
     @ApiBody({ type:  createProductDto})
     @Post()
@@ -48,6 +48,7 @@ export class ProductController extends BaseController{
             this.handleError(error);
         }
     }
+    @UseGuards(AuthGuard)
     @Put(':id')
     @ApiOperation({ summary: 'Update Product' })
     @UseInterceptors(FileInterceptor('file'))
@@ -88,6 +89,7 @@ export class ProductController extends BaseController{
             this.handleError(error);
         }
     }
+    @UseGuards(AuthGuard)
     @Get(':id')
     async getProductById(@Param('id')id:string,)
     {
@@ -106,6 +108,7 @@ export class ProductController extends BaseController{
             this.handleError(error);
         }
     }
+    @UseGuards(AuthGuard)
     @Delete(':id')
     async deleteProduct(@Param('id')id:string,)
     {

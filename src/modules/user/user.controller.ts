@@ -35,8 +35,9 @@ export class UserController extends BaseController{
             this.handleError(error);
         }
     }
-    @Role(RoleCollection.Admin)
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(AuthGuard)
+    // @Role(RoleCollection.Admin)
+    // @UseGuards(AuthGuard, RolesGuard)
     @ApiOperation({ summary: 'Create User' })
     @ApiBody({ type: createUserDto })
     @Post()
@@ -55,6 +56,7 @@ export class UserController extends BaseController{
             this.handleError(error);
         }
     }
+    
     @Put(':id')
     @UseInterceptors(FileInterceptor('file'))
     async updateUser(@Param('id')id:string,

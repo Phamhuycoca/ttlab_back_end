@@ -102,5 +102,15 @@ async checkEmail(email:string) {
     throw error;
   }
 }
+async findUserByEmail(email:string):Promise<User> {
+  try {
+    return this.userRepository.findOne({email: email});
+} catch (error) {
+    this.logger.error(
+        'Error in UserService findUserByEmail: ' + error,
+    );
+    throw error;
+}
+}
 
 }

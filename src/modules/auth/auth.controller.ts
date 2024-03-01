@@ -12,6 +12,7 @@ import { AuthGuard } from "../auth/guard/auth.guard";
 import { RolesGuard } from './guard/role.guard';
 import { LoggedInUser } from 'src/common/decorator/loggedInUser.decorator';
 import { UserService } from './../user/user.service';
+import { toObjectId } from 'src/common/helper/commonFunction';
 
 @Controller('auth')
 export class AuthController extends BaseController{
@@ -77,22 +78,23 @@ export class AuthController extends BaseController{
 
 
 
-  // @Post('forgot-password')
-  // async forgotPassword(@Body() body: any){
-  //   try{
-  //     const result = await this.UserService.checkEmail(body.email);
-  //     if(result){
-  //       const randomPassword = this.authService.generateRandomPassword();
-  //       console.log(randomPassword);
-  //     }
-  //     return new ErrorResponse(
-  //       HttpStatus.BAD_REQUEST,
-  //        "Email khong ton tai"
-  //   );
-  //   }catch(error){
-  //     this.handleError(error);
-
-  //   }
-  // }
+  @Post('forgot-password')
+  async forgotPassword(@Body() body: any){
+    try{
+      const result = await this.UserService.findUserByEmail(body.email);
+      if(!result){
+        return new ErrorResponse(
+          HttpStatus.BAD_REQUEST,
+          "Không tìm thấy email"
+          );
+        }
+          const password=this.authService.generateRandomPassword();
+          const updatePass=await this.UserService._updateUser(toObjectId(result.id),{password:password});
+          const send_email=await this.authService.sendEmail(body.email,password);
+          return new SuccessResponse(send_email);
+    }catch(error){
+      this.handleError(error);
+    }
+  }
   
 }

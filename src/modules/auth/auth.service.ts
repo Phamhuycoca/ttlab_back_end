@@ -7,6 +7,7 @@ import { AuthRepository } from "./repository/auth.repository";
 import { LoginDto } from "./dto/auth.interface";
 import * as jwt from 'jsonwebtoken';
 import { UserRepository } from './../user/repository/user.repository';
+import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class AuthService extends BaseService<User,AuthRepository>
 {
@@ -14,7 +15,8 @@ export class AuthService extends BaseService<User,AuthRepository>
     constructor(
         private readonly authRepository: AuthRepository,
         private jwtService: JwtService,
-        private readonly userRepository:UserRepository
+        private readonly userRepository:UserRepository,
+        private readonly mailerService:MailerService
     ) {
         super(authRepository);
     }
@@ -153,5 +155,20 @@ export class AuthService extends BaseService<User,AuthRepository>
         return password;
     }
     
-    
+    async sendEmail(toEmail:string,password_new:string){
+       try{
+        return await this.mailerService.sendMail({
+            to:toEmail,
+            from:'huypk@tokyotechlab.com',
+            subject:'Xác nhận mật khẩu',
+            text:'Mật khẩu mới của bạn là: '+password_new +'\n'+
+            `link đăng nhập: https://ttlab-front-end.vercel.app/login`            
+        });
+       }catch(error){
+        this.logger.error(
+            'Error in Send email: ' + error,
+          );
+          throw error;
+       }
+    }
 }

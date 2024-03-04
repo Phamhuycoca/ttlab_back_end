@@ -13,6 +13,7 @@ import { Role } from "../../common/decorator/roles.decorator";
 import { AuthGuard } from "../auth/guard/auth.guard";
 import { RolesGuard } from "../auth/guard/role.guard";
 import { LoggedInUser } from "../../common/decorator/loggedInUser.decorator";
+import { JoiValidationPipe } from "src/common/helper/pipe/joi.validation.pipe";
 
 
 @Controller('user')
@@ -42,7 +43,7 @@ export class UserController extends BaseController{
     @ApiBody({ type: createUserDto })
     @Post()
     @UseInterceptors(FileInterceptor('file'))
-    async createUser(@Body(new TrimBodyPipe()) dto: createUserDto,@UploadedFile() file: Express.Multer.File)
+    async createUser(@Body(new TrimBodyPipe()) dto: createUserDto ,@UploadedFile() file: Express.Multer.File)
     {
         try{
             // console.log(await this.UserService.checkEmail(dto.email));

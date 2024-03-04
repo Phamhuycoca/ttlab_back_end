@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, HttpException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
-import { LoginDto, forgotPassword } from './dto/auth.interface';
+import { LoginDto, RegisterDto, forgotPassword } from './dto/auth.interface';
 import { TrimBodyPipe } from '../../common/helper/pipe/trim.body.pipe';
 import { BaseController } from '../../common/base/base.controller';
 import { ErrorResponse, SuccessResponse } from '../../common/helper/response';
@@ -52,6 +52,23 @@ export class AuthController extends BaseController{
     this.handleError(error);
    }
   }
+
+  @Post('register')
+  async register(@Body(new TrimBodyPipe()) dto:RegisterDto) {
+    try{
+      console.log(dto);
+      if(!await this.UserService.checkEmail(dto.email)){
+        const result=await this.authService.Register(dto);
+        return new SuccessResponse(result);
+      }
+      throw new HttpException('Email đã tồn tại',HttpStatus.BAD_REQUEST);
+    }catch(error){
+      this.handleError(error);
+    }
+  }
+
+
+
   @Role(RoleCollection.Admin || RoleCollection.USERS)
   @UseGuards(AuthGuard,RolesGuard)
   @Get('user')

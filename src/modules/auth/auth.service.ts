@@ -4,7 +4,7 @@ import { User } from "../../database/schemas/user.schema";
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from "../../common/constants";
 import { AuthRepository } from "./repository/auth.repository";
-import { LoginDto } from "./dto/auth.interface";
+import { LoginDto, RegisterDto } from "./dto/auth.interface";
 import * as jwt from 'jsonwebtoken';
 import { UserRepository } from './../user/repository/user.repository';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -59,7 +59,18 @@ export class AuthService extends BaseService<User,AuthRepository>
             throw error;
         }
     }
-   
+   async Register(dto:RegisterDto){
+    try {
+        const user: SchemaCreateDocument<User> = {
+          ...(dto as any),
+        };
+        const res = await this.userRepository.createOne(user);
+        return res;
+      } catch (error) {
+        this.logger.error('Error in userService create user: ' + error);
+        throw error;
+      }
+   }
       
     // async generateRefreshToken(res: any){
     //     try{

@@ -12,7 +12,7 @@ import { HttpStatus, RoleCollection } from "../../common/constants";
 import { Role } from "../../common/decorator/roles.decorator";
 import { AuthGuard } from "../auth/guard/auth.guard";
 import { RolesGuard } from "../auth/guard/role.guard";
-import { LoggedInUser } from "src/common/decorator/loggedInUser.decorator";
+import { LoggedInUser } from "../../common/decorator/loggedInUser.decorator";
 
 
 @Controller('user')

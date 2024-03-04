@@ -8,6 +8,10 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from './modules/user/user.service';
 import { CloudinaryService } from './modules/cloudinary/cloudinary.service';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { UserRepository } from './modules/user/repository/user.repository';
+import { User, UserSchema } from './database/schemas/user.schema';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UserSeeder } from './modules/seed';
 
 @Module({
   imports: [
@@ -15,6 +19,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
     AuthModule,
     UserModule,
     ProductModule,
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+  ]),
     // MailerModule.forRoot({
     //   transport: {
     //     host: 'smtp.gmail.com',
@@ -31,6 +38,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
     // })
   ],
   controllers: [AppController],
-  providers: [JwtService,UserService,CloudinaryService],
+  providers: [JwtService,UserService,CloudinaryService,UserRepository,UserSeeder],
 })
 export class AppModule {}

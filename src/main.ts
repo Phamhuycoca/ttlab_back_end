@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import * as dotenv from 'dotenv'
+import { UserSeeder } from './modules/seed';
 dotenv.config();
 
 async function bootstrap() {
@@ -25,7 +26,8 @@ async function bootstrap() {
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
   };
   app.enableCors(corsOptions);
-
+  const seedData=app.get(UserSeeder);
+  await seedData.seed();
   //await app.listen(3000);
   await app.listen(process.env.PORT || 3000);
 

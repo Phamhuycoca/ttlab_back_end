@@ -4,15 +4,15 @@ import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { LoginDto, forgotPassword } from './dto/auth.interface';
 import { TrimBodyPipe } from '../../common/helper/pipe/trim.body.pipe';
 import { BaseController } from '../../common/base/base.controller';
-import { ErrorResponse, SuccessResponse } from 'src/common/helper/response';
+import { ErrorResponse, SuccessResponse } from '../../common/helper/response';
 import { BadRequestException } from '@nestjs/common';
-import { Role } from 'src/common/decorator/roles.decorator';
-import { RoleCollection,HttpStatus } from 'src/common/constants';
+import { Role } from '../../common/decorator/roles.decorator';
+import { RoleCollection,HttpStatus } from '../../common/constants';
 import { AuthGuard } from "../auth/guard/auth.guard";
 import { RolesGuard } from './guard/role.guard';
-import { LoggedInUser } from 'src/common/decorator/loggedInUser.decorator';
+import { LoggedInUser } from '../../common/decorator/loggedInUser.decorator';
 import { UserService } from './../user/user.service';
-import { toObjectId } from 'src/common/helper/commonFunction';
+import { toObjectId } from '../../common/helper/commonFunction';
 
 @Controller('auth')
 export class AuthController extends BaseController{
@@ -89,6 +89,7 @@ export class AuthController extends BaseController{
         //   "Không tìm thấy email"
         //   );
         }
+        console.log(result.id);
           const password=this.authService.generateRandomPassword();
           const updatePass=await this.UserService._updateUser(toObjectId(result.id),{password:password});
           const send_email=await this.authService.sendEmail(dto.email,password);

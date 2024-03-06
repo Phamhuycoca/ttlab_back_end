@@ -1,4 +1,3 @@
-// src/seeders/user.seeder.ts
 
 import { Injectable } from '@nestjs/common';
 import { UserService } from './user/user.service';

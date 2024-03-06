@@ -13,7 +13,6 @@ import { Role } from "../../common/decorator/roles.decorator";
 import { AuthGuard } from "../auth/guard/auth.guard";
 import { RolesGuard } from "../auth/guard/role.guard";
 import { LoggedInUser } from "../../common/decorator/loggedInUser.decorator";
-import { JoiValidationPipe } from "src/common/helper/pipe/joi.validation.pipe";
 
 
 @Controller('user')

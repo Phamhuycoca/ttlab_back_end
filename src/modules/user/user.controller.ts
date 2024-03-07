@@ -56,7 +56,7 @@ export class UserController extends BaseController{
             this.handleError(error);
         }
     }
-    
+    @UseGuards(AuthGuard)    
     @Patch(':id')
     @UseInterceptors(FileInterceptor('file'))
     async updateUser(@Param('id')id:string,
@@ -97,6 +97,7 @@ export class UserController extends BaseController{
             this.handleError(error);
         }
     }
+    @UseGuards(AuthGuard)
     @Get(':id')
     async getUserById(@Param('id')id:string,)
     {
@@ -115,6 +116,7 @@ export class UserController extends BaseController{
             this.handleError(error);
         }
     }
+    @UseGuards(AuthGuard)
     @Delete(':id')
     async deleteUser(@Param('id')id:string,)
     {

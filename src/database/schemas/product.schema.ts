@@ -23,7 +23,7 @@ export class Product extends MongoBaseSchema {
     @Prop({ required: true, type: Number })
     quantity?: number;
     
-    @Prop({ required: true, type: String })
+    @Prop({ type: String })
     description?: string;
     
     @Prop({ required: false, type: String })
